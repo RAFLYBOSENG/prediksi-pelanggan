@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Prediksi Pelanggan Berhenti</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        min-height: 100vh;
+        color: #fff;
+      }
+      .card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 6px 40px 0 #0003;
+        background: linear-gradient(120deg, #f5fafd 60%, #e6f0fa 100%);
+        color: #000;
+        margin-top: 30px;
+      }
+      .btn-sim {
+        font-weight: bold;
+        border: none;
+        color: #fff;
+      }
+      .btn-churn {
+        background: linear-gradient(90deg, #e53935 0%, #ef5350 100%);
+      }
+      .btn-churn:hover {
+        background: linear-gradient(90deg, #c62828 0%, #e57373 100%);
+      }
+      .btn-nonchurn {
+        background: linear-gradient(90deg, #2e7d32 0%, #66bb6a 100%);
+      }
+      .btn-nonchurn:hover {
+        background: linear-gradient(90deg, #1b5e20 0%, #81c784 100%);
+      }
+      .btn-predict {
+        background: linear-gradient(90deg, #1976d2 0%, #64b5f6 100%);
+        border: none;
+        color: #fff;
+        font-weight: bold;
+      }
+      .btn-predict:hover {
+        background: linear-gradient(90deg, #1565c0 0%, #42a5f5 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="text-center mt-4">
+        <h1 class="fw-bold text-light">Prediksi Pelanggan Berhenti</h1>
+        <p class="text-light-50">
+          Gunakan model Machine Learning untuk memprediksi apakah pelanggan akan berhenti berlangganan atau tidak
+        </p>  
+      </div>
+
+      <div class="card p-4">
+        <div class="text-center mb-3">
+          <h5>Simulasi Cepat</h5>
+          <div class="d-flex justify-content-center gap-3">
+            <button type="button" class="btn btn-sim btn-churn" id="btnChurn">
+              🔴 Tidak Lanjut Berlangganan
+            </button>
+            <button
+              type="button"
+              class="btn btn-sim btn-nonchurn"
+              id="btnNonChurn"
+            >
+              🟢 Masih Berlangganan
+            </button>
+          </div>
+        </div>
+
+        <hr />
+
+        <form method="POST" action="/predict" id="predictForm">
+          <div class="row g-3">
+            <!-- contoh beberapa input utama -->
+            <div class="col-md-4">
+              <label class="form-label">Jenis Kelamin</label>
+              <select class="form-select" name="gender" required>
+                <option value="">Pilih</option>
+                <option>Laki-laki</option>
+                <option>Perempuan</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Lansia (umur > 60)</label>
+              <select class="form-select" name="SeniorCitizen" required>
+                <option value="0">Tidak</option>
+                <option value="1">Ya</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Pasangan</label>
+              <select class="form-select" name="Partner" required>
+                <option value="">Pilih</option>
+                <option>Ya</option>
+                <option>Tidak</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Tanggungan</label>
+              <select class="form-select" name="Dependents" required>
+                <option value="">Pilih</option>
+                <option>Ya</option>
+                <option>Tidak</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Berlangganan (Tenure/bulan)</label>
+              <input
+                type="number"
+                class="form-control"
+                name="tenure"
+                required
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Biaya Bulanan</label>
+              <input
+                type="number"
+                step="0.01"
+                class="form-control"
+                name="MonthlyCharges"
+                required
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Total Biaya</label>
+              <input
+                type="number"
+                step="0.01"
+                class="form-control"
+                name="TotalCharges"
+                required
+              />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Jenis Kontrak</label>
+              <select class="form-select" name="Contract">
+                <option value="">Pilih</option>
+                <option>Bulan ke bulan</option>
+                <option>Satu tahun</option>
+                <option>Dua tahun</option>
+              </select>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Metode Pembayaran</label>
+              <select class="form-select" name="PaymentMethod">
+                <option value="">Pilih</option>
+                <option>Cek elektronik</option>
+                <option>Cek via pos</option>
+                <option>Transfer bank (otomatis)</option>
+                <option>Kartu kredit (otomatis)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-predict btn-lg">
+              🚀 Prediksi Sekarang
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      // Data simulasi
+      const sampleChurn = {
+        gender: "Perempuan",
+        SeniorCitizen: "1",
+        Partner: "Tidak",
+        Dependents: "Tidak",
+        tenure: "2",
+        MonthlyCharges: "95.5",
+        TotalCharges: "188.2",
+        Contract: "Bulan ke bulan",
+        PaymentMethod: "Cek elektronik",
+      };
+      const sampleNonChurn = {
+        gender: "Laki-laki",
+        SeniorCitizen: "0",
+        Partner: "Ya",
+        Dependents: "Ya",
+        tenure: "48",
+        MonthlyCharges: "55.1",
+        TotalCharges: "2640.7",
+        Contract: "Dua tahun",
+        PaymentMethod: "Transfer bank (otomatis)",
+      };
+
+      function fillForm(data) {
+        for (const key in data) {
+          const field = document.querySelector(`[name="${key}"]`);
+          if (field) field.value = data[key];
+        }
+      }
+
+      document
+        .getElementById("btnChurn")
+        .addEventListener("click", () => fillForm(sampleChurn));
+      document
+        .getElementById("btnNonChurn")
+        .addEventListener("click", () => fillForm(sampleNonChurn));
+    </script>
+  </body>
+</html>
